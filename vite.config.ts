@@ -207,7 +207,7 @@ const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(
 
 export default defineConfig({
   plugins,
-  base: process.env.GITHUB_PAGES === 'true' ? '/devops-portfolio-ci-cd/' : '/',
+  base: process.env.GITHUB_PAGES === 'true' ? '/behoerdenhelfer/' : '/',
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),

@@ -1,4 +1,4 @@
-# German Bureaucracy Helper
+# Behördenhelfer
 
 Ein modernes Web-Anwendung, die Expats, Studierenden und neuen Arbeitnehmern hilft, deutsche Behördenprozesse zu navigieren.
 
@@ -120,7 +120,7 @@ Das Projekt verwendet GitHub Actions für automatisierte Tests und Deployment:
 Die Anwendung wird automatisch zu GitHub Pages deployed:
 
 ```
-https://rintu-chowdory.github.io/devops-portfolio-ci-cd/
+https://rintu-chowdory.github.io/behoerdenhelfer/
 ```
 
 ### Deployment-Prozess
@@ -139,7 +139,7 @@ https://rintu-chowdory.github.io/devops-portfolio-ci-cd/
 
 Für GitHub Pages Deployment:
 ```bash
-GITHUB_PAGES=true    # Setzt base path zu /devops-portfolio-ci-cd/
+GITHUB_PAGES=true    # Setzt base path zu /behoerdenhelfer/
 ```
 
 ### Vite Konfiguration

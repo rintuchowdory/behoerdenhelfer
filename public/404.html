@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DevOps Portfolio</title>
+    <title>Behördenhelfer</title>
     <script>
       // GitHub Pages SPA redirect
       // This script handles client-side routing for single-page applications
@@ -11,7 +11,7 @@
       const pathSegments = path.split('/').filter(Boolean);
       
       // Store the original path for the SPA to handle
-      if (pathSegments.length > 0 && pathSegments[0] === 'devops-portfolio-ci-cd') {
+      if (pathSegments.length > 0 && pathSegments[0] === 'behoerdenhelfer') {
         // Remove the repo name from the path
         const redirectPath = '/' + pathSegments.slice(1).join('/');
         sessionStorage.redirect = redirectPath;
@@ -20,7 +20,7 @@
       }
       
       // Redirect to index.html
-      window.location.href = '/devops-portfolio-ci-cd/';
+      window.location.href = '/behoerdenhelfer/';
     </script>
   </head>
   <body>

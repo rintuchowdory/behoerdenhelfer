@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: german-bureaucracy-helper
+  name: behoerdenhelfer
   labels:
-    app: bureaucracy-helper
+    app: behoerdenhelfer
 spec:
   replicas: 3
   strategy:
@@ -13,15 +13,15 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: bureaucracy-helper
+      app: behoerdenhelfer
   template:
     metadata:
       labels:
-        app: bureaucracy-helper
+        app: behoerdenhelfer
     spec:
       containers:
       - name: app
-        image: ghcr.io/rintu-chowdory/german-bureaucracy-helper:latest
+        image: ghcr.io/rintu-chowdory/behoerdenhelfer:latest
         ports:
         - containerPort: 3000
           name: http

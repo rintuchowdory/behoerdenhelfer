@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: devops-portfolio-config
+  name: behoerdenhelfer-config
   namespace: default
   labels:
-    app: devops-portfolio
+    app: behoerdenhelfer
 data:
   api_url: 'https://api.example.com'
-  app_name: 'DevOps Portfolio'
+  app_name: 'Behördenhelfer'
   app_version: 'v2.0.0'
   log_level: 'info'

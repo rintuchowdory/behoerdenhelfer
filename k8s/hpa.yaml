@@ -1,12 +1,12 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: bureaucracy-helper-hpa
+  name: behoerdenhelfer-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: german-bureaucracy-helper
+    name: behoerdenhelfer
   minReplicas: 3
   maxReplicas: 10
   metrics:
