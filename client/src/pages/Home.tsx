@@ -216,7 +216,7 @@ export default function Home() {
             <div className="relative hidden md:block">
               <div className="relative w-full aspect-square">
                 <img
-                  src="https://d2xsxph8kpxj0f.cloudfront.net/310519663511224854/Hieb3sfsz5eXqDVHfDSYSN/hero-bureaucracy-Fc4Q7XQTxrCdWRVUJk4xgL.webp"
+                  src="https://media.base44.com/images/public/6a487c57c6a36ffad94c6091/59ec4f0ba_generated_image.png"
                   alt="German Bureaucracy Helper"
                   className="w-full h-full object-cover rounded-2xl shadow-lg"
                 />
