@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLocation } from "wouter";
 import { ArrowLeft, Plus, Trash2, Download } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Design: Minimalistisches Vertrauens-Design
@@ -139,10 +139,47 @@ export default function ChecklistGenerator() {
   const [, navigate] = useLocation();
   const [selectedChecklist, setSelectedChecklist] = useState<Checklist | null>(null);
   const [items, setItems] = useState<ChecklistItem[]>([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newCategory, setNewCategory] = useState("");
 
   const selectChecklist = (checklist: Checklist) => {
     setSelectedChecklist(checklist);
-    setItems(checklist.items);
+    try {
+      const saved = localStorage.getItem(`bh:checklist:${checklist.id}`);
+      setItems(saved ? (JSON.parse(saved) as ChecklistItem[]) : checklist.items);
+    } catch {
+      setItems(checklist.items);
+    }
+  };
+
+  // Fortschritt lokal speichern
+  useEffect(() => {
+    if (selectedChecklist) {
+      localStorage.setItem(
+        `bh:checklist:${selectedChecklist.id}`,
+        JSON.stringify(items)
+      );
+    }
+  }, [items, selectedChecklist]);
+
+  const addItem = () => {
+    if (!newTitle.trim()) return;
+    setItems([
+      ...items,
+      {
+        id: `custom-${Date.now()}`,
+        title: newTitle.trim(),
+        description: newDescription.trim() || "Eigene Aufgabe",
+        completed: false,
+        category: newCategory.trim() || "Eigene",
+      },
+    ]);
+    setNewTitle("");
+    setNewDescription("");
+    setNewCategory("");
+    setShowAddForm(false);
   };
 
   const toggleItem = (id: string) => {
@@ -184,7 +221,7 @@ Fortschritt: ${completedCount}/${totalCount} (${Math.round(progressPercent)}%)
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -314,6 +351,54 @@ Fortschritt: ${completedCount}/${totalCount} (${Math.round(progressPercent)}%)
               ))}
             </div>
 
+            {/* Add Form */}
+            {showAddForm && (
+              <Card className="p-6 border border-blue-200 bg-white space-y-4">
+                <h4 className="text-lg font-bold text-gray-900">Neue Aufgabe</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="md:col-span-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Titel</label>
+                    <input
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                      placeholder="z. B. Termin beim Bürgeramt buchen"
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-100 transition-colors placeholder:text-gray-400"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Beschreibung (optional)</label>
+                    <input
+                      value={newDescription}
+                      onChange={(e) => setNewDescription(e.target.value)}
+                      placeholder="Details zur Aufgabe"
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-100 transition-colors placeholder:text-gray-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Kategorie</label>
+                    <input
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      placeholder="z. B. Vorbereitung"
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-100 transition-colors placeholder:text-gray-400"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Button className="bg-blue-700 hover:bg-blue-800 text-white" onClick={addItem}>
+                    Hinzufügen
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                    onClick={() => setShowAddForm(false)}
+                  >
+                    Abbrechen
+                  </Button>
+                </div>
+              </Card>
+            )}
+
             {/* Actions */}
             <div className="flex gap-4 justify-between">
               <Button
@@ -332,7 +417,10 @@ Fortschritt: ${completedCount}/${totalCount} (${Math.round(progressPercent)}%)
                   <Download className="w-4 h-4" />
                   Herunterladen
                 </Button>
-                <Button className="bg-blue-700 hover:bg-blue-800 text-white flex items-center gap-2">
+                <Button
+                  className="bg-blue-700 hover:bg-blue-800 text-white flex items-center gap-2"
+                  onClick={() => setShowAddForm((s) => !s)}
+                >
                   <Plus className="w-4 h-4" />
                   Neue Aufgabe
                 </Button>

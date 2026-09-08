@@ -189,3 +189,17 @@
     }
   }
 }
+/* ==========================================================================
+   Signature background — guilloché pattern, inspired by the fine security
+   line-work on official German documents (Ausweis, Briefmarken, Banknoten).
+   ========================================================================== */
+body {
+  background-color: #f7f9fc;
+  background-image:
+    radial-gradient(1100px 520px at 88% -12%, rgba(30, 64, 175, 0.08), transparent 62%),
+    radial-gradient(900px 480px at -8% 42%, rgba(30, 64, 175, 0.06), transparent 60%),
+    radial-gradient(700px 420px at 55% 118%, rgba(16, 185, 129, 0.05), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='%231e40af' stroke-opacity='0.055' stroke-width='1'%3E%3Cpath d='M0 35 Q35 0 70 35 T140 35'/%3E%3Cpath d='M0 70 Q35 35 70 70 T140 70'/%3E%3Cpath d='M0 105 Q35 70 70 105 T140 105'/%3E%3Cpath d='M0 18 Q70 52 140 18'/%3E%3Cpath d='M0 88 Q70 122 140 88'/%3E%3Cpath d='M35 0 Q0 35 35 70 T35 140'/%3E%3Cpath d='M70 0 Q35 35 70 70 T70 140'/%3E%3Cpath d='M105 0 Q70 35 105 70 T105 140'/%3E%3Cpath d='M18 0 Q52 70 18 140'/%3E%3Cpath d='M88 0 Q122 70 88 140'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: auto, auto, auto, 140px 140px;
+}

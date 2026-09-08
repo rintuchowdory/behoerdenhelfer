@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLocation } from "wouter";
 import { ArrowLeft, Upload, FileText, AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 /**
  * Design: Minimalistisches Vertrauens-Design
@@ -134,9 +135,39 @@ const SAMPLE_DOCUMENTS: Record<string, { name: string; sections: DocumentSection
   },
 };
 
+interface UploadedFile {
+  name: string;
+  text: string;
+}
+
 export default function DocumentExplainer() {
   const [, navigate] = useLocation();
   const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const isText =
+      file.type.startsWith("text/") ||
+      /\.(txt|md|csv)$/i.test(file.name);
+    if (isText) {
+      try {
+        const text = await file.text();
+        setUploadedFile({ name: file.name, text });
+        toast.success(`„${file.name}“ geladen`);
+      } catch {
+        toast.error("Datei konnte nicht gelesen werden");
+      }
+    } else {
+      setUploadedFile({ name: file.name, text: "" });
+      toast.info(
+        "Für PDFs & Scans ist der Text nicht direkt lesbar — nutzen Sie die Beispieldokumente oder das Glossar."
+      );
+    }
+    e.target.value = "";
+  };
 
   const currentDoc =
     selectedDoc && SAMPLE_DOCUMENTS[selectedDoc]
@@ -144,7 +175,7 @@ export default function DocumentExplainer() {
       : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -170,18 +201,78 @@ export default function DocumentExplainer() {
           // Document Selection View
           <div className="space-y-6">
             {/* Upload Section */}
-            <Card className="p-8 border-2 border-dashed border-gray-300 bg-white text-center hover:border-blue-700 transition-colors cursor-pointer">
+            <Card
+              className="p-8 border-2 border-dashed border-gray-300 bg-white text-center hover:border-blue-700 transition-colors cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
               <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-gray-900 mb-2">
                 Ihr eigenes Dokument hochladen
               </h3>
               <p className="text-gray-600 mb-4">
-                Laden Sie ein Dokument hoch, das Sie nicht verstehen
+                Textdatei (.txt) hochladen — bleibt vollständig lokal auf Ihrem Gerät
               </p>
               <Button className="bg-blue-700 hover:bg-blue-800 text-white">
                 Datei auswählen
               </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".txt,.md,.csv,text/plain,text/markdown,text/csv"
+                className="hidden"
+                onChange={handleFileSelect}
+              />
             </Card>
+
+            {/* Uploaded file preview */}
+            {uploadedFile && (
+              <Card className="p-6 border border-blue-200 bg-white">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-50 rounded-lg">
+                      <FileText className="w-5 h-5 text-blue-700" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900">{uploadedFile.name}</h3>
+                      <p className="text-xs text-gray-500">
+                        {uploadedFile.text.length > 0
+                          ? `${uploadedFile.text.length} Zeichen geladen`
+                          : "Kein lesbarer Textinhalt"}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setUploadedFile(null)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label="Datei entfernen"
+                  >
+                    ✕
+                  </button>
+                </div>
+                {uploadedFile.text.length > 0 ? (
+                  <>
+                    <pre className="whitespace-pre-wrap font-mono text-xs text-gray-700 bg-gray-50 rounded-lg border border-gray-200 p-4 max-h-64 overflow-y-auto">
+                      {uploadedFile.text}
+                    </pre>
+                    <p className="text-xs text-gray-500 mt-3">
+                      Tipp: Unklare Begriffe können Sie im{" "}
+                      <a
+                        className="text-blue-700 font-medium hover:underline"
+                        href={(import.meta.env.BASE_URL + "glossar").replace(/([^:]\/)\/+/g, "$1")}
+                      >
+                        Amtsdeutsch-Glossar
+                      </a>{" "}
+                        nachschlagen.
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-600">
+                    Für PDFs und Scans: Nutzen Sie die Beispieldokumente unten oder das
+                    Amtsdeutsch-Glossar für typische Abschnitte und Begriffe.
+                  </p>
+                )}
+              </Card>
+            )}
 
             {/* Sample Documents */}
             <div>

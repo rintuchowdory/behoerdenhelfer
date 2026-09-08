@@ -8,13 +8,16 @@ import Home from "./pages/Home";
 import ChecklistGenerator from "./pages/ChecklistGenerator";
 import DocumentExplainer from "./pages/DocumentExplainer";
 import DeadlineReminders from "./pages/DeadlineReminders";
+import BriefGenerator from "./pages/BriefGenerator";
+import Glossar from "./pages/Glossar";
+import AmtsFinder from "./pages/AmtsFinder";
 
 /**
  * Design Philosophy: Minimalistisches Vertrauens-Design
  * - Behördenblau (#1E40AF) für Vertrauen und Professionalität
  * - Playfair Display für Überschriften (Autorität)
  * - Inter für Body-Text (Lesbarkeit)
- * - Asymmetrisches 3-Spalten-Layout mit Sidebar
+ * - Guilloché-Signaturhintergrund (siehe index.css)
  * - Schnelle, subtile Animationen (150-200ms)
  */
 
@@ -27,6 +30,9 @@ function Router() {
       <Route path={"/checklist-generator"} component={ChecklistGenerator} />
       <Route path={"/document-explainer"} component={DocumentExplainer} />
       <Route path={"/deadline-reminders"} component={DeadlineReminders} />
+      <Route path={"/brief-generator"} component={BriefGenerator} />
+      <Route path={"/glossar"} component={Glossar} />
+      <Route path={"/amts-finder"} component={AmtsFinder} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
